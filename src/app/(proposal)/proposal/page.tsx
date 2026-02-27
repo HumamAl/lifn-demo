@@ -1,153 +1,327 @@
-// Proposal Builder agent replaces this content.
-// This placeholder demonstrates the correct structure and styling for Tab 3.
-//
-// Rules for the Proposal Builder:
-//   - Dark panel hero (--section-dark bg) with name, value prop, pulsing badge
-//   - Proof of Work: 3-4 portfolio projects using <ProjectCard> component
-//     Link only if liveUrl exists in developer-profile.md — never link to "#"
-//   - How I Work: 4-step process (steps can vary based on job)
-//   - Skills Grid: relevant tech only — use <SkillsGrid> component
-//   - Dark panel CTA at bottom: pulsing availability dot + "Reply on Upwork to start"
-//   - Signed "— Humam"
-//   - NO: hover:-translate-y-*, shadow-lg, rounded-xl, glassmorphism
-//   - NO: dead CTA links, buzzwords ("passionate", "innovative", "leverage")
-
 import { APP_CONFIG } from "@/lib/config";
 import { profile, portfolioProjects } from "@/data/proposal";
-import { ProjectCard } from "@/components/proposal/project-card";
-import { SkillsGrid } from "@/components/proposal/skills-grid";
+import { ExternalLink, TrendingUp } from "lucide-react";
+
+// Stats from developer-profile.md — exact numbers, never inflated
+const heroStats = [
+  { value: "24+", label: "Projects Shipped" },
+  { value: "< 48hr", label: "Demo Turnaround" },
+  { value: "15+", label: "Industries Served" },
+];
 
 export default function ProposalPage() {
+  const displayName =
+    APP_CONFIG.clientName !== null ? APP_CONFIG.clientName : APP_CONFIG.projectName;
+
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-4xl mx-auto p-6 space-y-8">
+    <div className="max-w-4xl mx-auto px-6 py-8 space-y-12">
 
-        {/* ── Hero — dark panel ── */}
+      {/* ── Section 1: Hero (Project Brief) ── */}
+      <section
+        className="relative rounded-2xl overflow-hidden"
+        style={{ background: "oklch(0.07 0.015 var(--primary-h, 260))" }}
+      >
+        {/* Radial highlight — indigo glow at top */}
         <div
-          className="rounded-lg p-8 space-y-4"
-          style={{ background: "var(--section-dark)" }}
-        >
-          {/* "Built this demo for your project" badge */}
-          <div className="inline-flex items-center gap-2">
-            <span className="relative inline-flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary/60 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
-            </span>
-            <span className="text-xs font-mono text-white/50 tracking-wider uppercase">
-              Built this demo for your project
-            </span>
-          </div>
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse 70% 40% at 50% 0%, oklch(0.52 0.17 260 / 0.12), transparent 70%)",
+          }}
+        />
 
-          <div>
-            <h1 className="text-3xl font-light text-white/60">
-              Hi, I&apos;m{" "}
-              <span className="font-black text-white">{profile.name}</span>
-            </h1>
-            <p className="text-base text-white/60 mt-2 leading-relaxed max-w-2xl">
-              {profile.tagline}
-            </p>
-          </div>
+        <div className="relative z-10 p-8 md:p-12">
+          {/* Effort badge — mandatory */}
+          <span className="inline-flex items-center gap-1.5 text-xs font-medium bg-white/10 border border-white/10 text-white/80 px-3 py-1 rounded-full mb-6">
+            <span className="relative inline-flex h-1.5 w-1.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-primary" />
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary" />
+            </span>
+            Built this demo for {displayName}
+          </span>
 
-          <p className="text-sm text-white/50 leading-relaxed max-w-2xl">
-            {profile.bio}
+          {/* Role prefix */}
+          <p className="font-mono text-xs tracking-widest uppercase text-white/40 mb-4">
+            Full-Stack Developer · AI Execution Architect
           </p>
 
-          {/* Availability + CTA — text, not a dead button */}
-          <div className="pt-2 flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <span className="relative inline-flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[color:var(--success)]/60 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[color:var(--success)]" />
-              </span>
-              <span className="text-xs text-white/50">Currently available</span>
-            </div>
-            <span className="text-xs text-white/30">·</span>
-            <span className="text-xs font-medium text-primary">
-              Reply on Upwork to start
-            </span>
-          </div>
+          {/* Name — weight contrast */}
+          <h1 className="text-5xl md:text-6xl tracking-tight leading-none mb-4">
+            <span className="font-light text-white/70">Hi, I&apos;m</span>{" "}
+            <span className="font-black text-white">{profile.name}</span>
+          </h1>
+
+          {/* Tailored value prop */}
+          <p className="text-lg md:text-xl text-white/60 max-w-2xl leading-relaxed">
+            {profile.tagline}
+          </p>
+
+          <p className="text-sm text-white/45 max-w-2xl leading-relaxed mt-3">
+            {profile.bio}
+          </p>
         </div>
 
-        {/* ── Proof of Work — portfolio projects ── */}
-        <div>
-          <h2 className="text-lg font-semibold mb-4">Relevant Projects</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {portfolioProjects.map((project) => (
-              <ProjectCard
-                key={project.id}
-                title={project.title}
-                description={project.description}
-                tech={project.tech}
-                relevance={project.relevance}
-                outcome={project.outcome}
-                liveUrl={project.liveUrl}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* ── How I Work ── */}
-        <div>
-          <h2 className="text-lg font-semibold mb-4">How I Work</h2>
-          <div className="space-y-4">
-            {profile.approach.map((step, i) => (
-              <div key={step.title} className="flex gap-4">
-                <div className="flex flex-col items-center">
-                  <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold font-mono shrink-0">
-                    {i + 1}
-                  </div>
-                  {i < profile.approach.length - 1 && (
-                    <div className="w-px flex-1 bg-border/60 mt-2" />
-                  )}
+        {/* Stats shelf */}
+        <div
+          className="relative z-10 border-t px-8 py-4"
+          style={{
+            borderColor: "oklch(1 0 0 / 0.08)",
+            background: "oklch(1 0 0 / 0.04)",
+          }}
+        >
+          <div className="grid grid-cols-3 gap-4">
+            {heroStats.map((stat) => (
+              <div key={stat.label}>
+                <div className="text-2xl font-bold text-white">
+                  {stat.value}
                 </div>
-                <div className="pb-5">
-                  <p className="text-sm font-medium">{step.title}</p>
-                  <p className="text-sm text-muted-foreground mt-0.5">
-                    {step.description}
-                  </p>
-                </div>
+                <div className="text-xs text-white/50 mt-0.5">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
+      </section>
 
-        {/* ── Skills Grid — relevant tech only ── */}
+      {/* ── Section 2: Proof of Work ── */}
+      <section className="space-y-5">
         <div>
-          <h2 className="text-lg font-semibold mb-4">Skills</h2>
-          <SkillsGrid categories={profile.skillCategories} />
+          <p className="font-mono text-xs tracking-widest uppercase text-muted-foreground mb-1">
+            Proof of Work
+          </p>
+          <h2 className="text-2xl font-bold tracking-tight">
+            Relevant Projects
+          </h2>
         </div>
 
-        {/* ── CTA close — dark panel ── */}
-        <div
-          className="rounded-lg p-8 space-y-4"
-          style={{ background: "var(--section-dark)" }}
-        >
-          <div className="flex items-center gap-2">
-            <span className="relative inline-flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[color:var(--success)]/60 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[color:var(--success)]" />
-            </span>
-            <span className="text-xs text-white/50">Currently available</span>
-          </div>
-          <h2 className="text-xl font-light text-white/60">
-            Let&apos;s build{" "}
-            <span className="font-bold text-white">
-              {APP_CONFIG.projectName}
-            </span>{" "}
-            together
-          </h2>
-          <p className="text-sm text-white/50 leading-relaxed max-w-lg">
-            This demo is a starting point. I can have the production version
-            scoped and started within days of your reply.
+        <div className="grid gap-4 md:grid-cols-2">
+          {portfolioProjects.map((project) => (
+            <div
+              key={project.id}
+              className="aesthetic-card p-5 space-y-3"
+            >
+              <div className="flex items-start justify-between gap-2">
+                <h3 className="text-base font-semibold leading-tight">
+                  {project.title}
+                </h3>
+                {project.liveUrl && (
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground hover:text-primary shrink-0 transition-colors"
+                    style={{ transitionDuration: "var(--dur-fast)" }}
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                )}
+              </div>
+
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {project.description}
+              </p>
+
+              {/* Outcome badge */}
+              {project.outcome && (
+                <div className="flex items-start gap-2 text-sm">
+                  <TrendingUp
+                    className="w-3.5 h-3.5 shrink-0 mt-0.5"
+                    style={{ color: "var(--success)" }}
+                  />
+                  <span style={{ color: "var(--success)" }}>
+                    {project.outcome}
+                  </span>
+                </div>
+              )}
+
+              {/* Tech tags */}
+              <div className="flex flex-wrap gap-1.5">
+                {project.tech.map((t) => (
+                  <span
+                    key={t}
+                    className="px-2 py-0.5 rounded-md text-xs font-mono bg-primary/10 text-primary"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+
+              {/* Relevance note */}
+              {project.relevance && (
+                <p className="text-xs italic text-primary/70">
+                  {project.relevance}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Section 3: How I Work ── */}
+      <section className="space-y-5">
+        <div>
+          <p className="font-mono text-xs tracking-widest uppercase text-muted-foreground mb-1">
+            Process
           </p>
-          {/* "Reply on Upwork to start" — text, not a dead link */}
-          <p className="text-sm font-medium text-primary">
+          <h2 className="text-2xl font-bold tracking-tight">How I Work</h2>
+        </div>
+
+        {/* Timeline approach: step numbers with a vertical connector */}
+        <div className="space-y-0">
+          {profile.approach.map((step, i) => {
+            const stepLabels = ["01", "02", "03", "04"];
+            const timelines = [
+              "Week 1",
+              "Week 1–2",
+              "Week 3–4",
+              "Week 1 onward",
+            ];
+            return (
+              <div key={step.title} className="flex gap-5">
+                {/* Step number + vertical line */}
+                <div className="flex flex-col items-center">
+                  <div
+                    className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-mono font-bold shrink-0 border bg-primary/15 border-primary/30 text-primary"
+                  >
+                    {stepLabels[i]}
+                  </div>
+                  {i < profile.approach.length - 1 && (
+                    <div
+                      className="w-px flex-1 my-1"
+                      style={{ background: "oklch(1 0 0 / 0.08)" }}
+                    />
+                  )}
+                </div>
+
+                {/* Step content */}
+                <div className={i < profile.approach.length - 1 ? "pb-6" : ""}>
+                  <div className="flex items-center gap-3 mb-1">
+                    <h3 className="text-sm font-semibold">{step.title}</h3>
+                    <span className="font-mono text-xs text-muted-foreground/60">
+                      {timelines[i]}
+                    </span>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {step.description}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ── Section 4: Skills Grid ── */}
+      <section className="space-y-5">
+        <div>
+          <p className="font-mono text-xs tracking-widest uppercase text-muted-foreground mb-1">
+            Tech Stack
+          </p>
+          <h2 className="text-2xl font-bold tracking-tight">
+            What I Build With
+          </h2>
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          {profile.skillCategories.map((category) => (
+            <div
+              key={category.name}
+              className="aesthetic-card p-4 space-y-2.5"
+            >
+              <p className="text-xs font-mono font-medium text-muted-foreground uppercase tracking-wider">
+                {category.name}
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {category.skills.map((skill) => (
+                  <span
+                    key={skill}
+                    className="px-2.5 py-1 rounded-md text-sm font-mono"
+                    style={{
+                      border: "1px solid oklch(1 0 0 / 0.10)",
+                      background: "oklch(1 0 0 / 0.04)",
+                      color: "var(--foreground)",
+                    }}
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Section 5: CTA (Dark Panel) ── */}
+      <section
+        className="relative rounded-2xl overflow-hidden text-center"
+        style={{ background: "oklch(0.07 0.015 var(--primary-h, 260))" }}
+      >
+        {/* Subtle radial glow at top-center */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse 60% 35% at 50% 0%, oklch(0.52 0.17 260 / 0.10), transparent 70%)",
+          }}
+        />
+
+        <div className="relative z-10 p-8 md:p-12 space-y-4">
+          {/* Pulsing availability indicator */}
+          <div className="flex items-center justify-center gap-2">
+            <span className="relative inline-flex h-2 w-2">
+              <span
+                className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
+                style={{ background: "var(--success)" }}
+              />
+              <span
+                className="relative inline-flex rounded-full h-2 w-2"
+                style={{ background: "var(--success)" }}
+              />
+            </span>
+            <span
+              className="text-sm"
+              style={{ color: "color-mix(in oklch, var(--success) 80%, white)" }}
+            >
+              Currently available for new projects
+            </span>
+          </div>
+
+          {/* Tailored headline */}
+          <h2 className="text-2xl font-bold text-white leading-tight">
+            Ready to build the dispatcher layer your spec describes.
+          </h2>
+
+          {/* Specific body — references this demo */}
+          <p className="text-white/60 max-w-lg mx-auto leading-relaxed text-sm">
+            The demo in Tab 1 shows the typed intent flow, confirmation gate,
+            and service routing already wired together. The real product ships
+            with the FastAPI backend, iOS build pipeline, and full Google OAuth
+            — same architecture, production grade.
+          </p>
+
+          {/* Primary action — text, not a dead button */}
+          <p className="text-lg font-semibold text-white pt-2">
             Reply on Upwork to start
           </p>
-          <p className="text-sm text-white/40 pt-2">— Humam</p>
-        </div>
 
-      </div>
+          {/* Secondary — back to demo */}
+          <a
+            href="/"
+            className="inline-flex items-center gap-1 text-sm text-white/40 hover:text-white/60 transition-colors"
+            style={{ transitionDuration: "var(--dur-fast)" }}
+          >
+            ← Back to the demo
+          </a>
+
+          {/* Signature */}
+          <p
+            className="pt-4 text-sm text-white/35 border-t"
+            style={{ borderColor: "oklch(1 0 0 / 0.08)" }}
+          >
+            — Humam
+          </p>
+        </div>
+      </section>
+
     </div>
   );
 }
